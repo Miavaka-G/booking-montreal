@@ -1,0 +1,8 @@
+__pycache__
+*.pyc
+*.pyo
+toolkit/__pycache__
+toolkit/*.pyc
+dests/
+.env
+.env_linux
