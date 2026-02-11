@@ -6,4 +6,3 @@ toolkit/*.pyc
 dests/
 .env
 .env_linux
-og.params.json
