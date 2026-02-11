@@ -650,7 +650,7 @@ class BookingScraper(object):
                         except:
                             taxe_text = taxe.find('div', string=re.compile("et frais", re.IGNORECASE)).text.strip()
                         
-                        if "Incluye impuestos y cargos" not in taxe_text:
+                        if "Taxes et frais compris" not in taxe_text:
                             taxe_text = taxe_text.split(' ')[1].split('\xa0')[1]
                         else:
                             taxe_text = 0 #c'est maintenant du int donc il faut tester son type en bas et non plus comme la condition du haut là
