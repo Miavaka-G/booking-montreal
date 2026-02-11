@@ -33,6 +33,8 @@ DESTINATION_PATH = os.environ.get('DESTINATION_PATH')
 BUG_TRACK_PATH = os.environ.get('BUG_TRACK_PATH')
 LOGS_FOLDER_PATH = os.environ.get('LOGS_FOLDER_PATH')
 
+SYSTEM = os.environ.get('SYSTEM')
+
 FILED_NAMES = [
                 'web-scraper-order',
                 'date_price',
@@ -277,8 +279,11 @@ class BookingScraper(object):
         self.chrome_options.add_argument('--lang=es')
 
         #pour linux on a besoin de ça car les driver ont été mise à jour sinon pas besoin de mettre le parms service dans le 11
-        # self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=self.chrome_options)
-        self.driver = webdriver.Chrome(options=self.chrome_options) #en windows
+        #pour linux on a besoin de ça car les driver ont été mise à jour sinon pas besoin de mettre le parms service dans le 11
+        if SYSTEM == "windows":
+             self.driver = webdriver.Chrome(options=self.chrome_options)
+        elif SYSTEM == "linux":
+            self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=self.chrome_options)
         self.driver.maximize_window()
 
     def create_log(self) -> None:
