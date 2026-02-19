@@ -3,6 +3,7 @@ __pycache__
 *.pyo
 toolkit/__pycache__
 toolkit/*.pyc
+toolkit/og.params.json
 dests/
 .env
 .env_linux
