@@ -647,15 +647,25 @@ class BookingScraper(object):
                         try:
                             #montreal in ES
                             taxe_text = taxe.find('div', string=re.compile("impuestos", re.IGNORECASE)).text.strip() #OK
+                            #Par précaution, on va revériier la langue ici car en local parfois ça revient en ES je ne sais pa spourquoi alors que dans le paramètre c'est strictement FR 19 02 2026
+                            check_langage = input(f"Le langage est en ES,check le navigateur et stop car ce n'est pas normal")
+                            if check_langage == "M":
+                                input('STOP LE PROGRAMME')
                         except:
                             taxe_text = taxe.find('div', string=re.compile("et frais", re.IGNORECASE)).text.strip()
                         
                         if "Taxes et frais compris" not in taxe_text:
-                            taxe_text = taxe_text.split(' ')[1].split('\xa0')[1]
+                            print('TAXE présente sur site')
+                            print('             ')
+                            print(f'Taxe inscrit = {taxe_text}')
+                            taxe_text = taxe_text.split('CAD')[1]
+                            print('         ')
+                            print('taxe prise en compte')
                         else:
+                            print('TAXE compris dans le prix affiché')
                             taxe_text = 0 #c'est maintenant du int donc il faut tester son type en bas et non plus comme la condition du haut là
                     except Exception as e:
-                        print(f'taxe not found => {e}')
+                        input(f'taxe not found => {e}')
                         pass
 
                     #09 02 2026Prix init = prix barré si ça existe comme Nicolas l'a demandé
@@ -670,16 +680,22 @@ class BookingScraper(object):
                             print(f'prix actual sans taxe trouvé dans les divs => {prix_actual_sans_taxe}')
                         except Exception as e:
                             input(f'prix actuel sans taxe not found in divs aussi, check and update selector si besoin => {e}')
-                    try:
-                        prix_init = row.find('div', 'bui-f-color-destructive js-strikethrough-price prco-inline-block-maker-helper bui-price-display__original')
-                        prix_init = prix_init['data-strikethrough-value']
-                        if prix_init:
+
+                    #Optimisation 19 02 2026 : content_prix_barre peut être None on va directement gérer pas de Try
+                    content_prix_barre = row.find('div', 'bui-f-color-destructive js-strikethrough-price prco-inline-block-maker-helper bui-price-display__original')
+                    # prix_init = prix_init['data-strikethrough-value'] #19 02 2026 : dans l'attribut il y a des virgule parfois, on va maintenant prendre le texte brut
+                    #19 02 2026 : Bien se mettre en question que le prix barré existe
+                    if content_prix_barre != None:
+                        try:
+                            # input(f'Le contenu en texte {content_prix_barre.text}')
+                            prix_init = content_prix_barre.text.strip().split('CAD')[1].strip()
                             print('         ')
                             print(f'Current price real exist (prix barré), prix init = {prix_init}')
                             print('         ')
-                            # input(f' prix init barré , ')
+                        except Exception as e:
+                            input(f'Erreur dans l\'extraction du prix barré => {e}')
                             
-                    except: #recherche de moyen de gérer si le prix barré est là mais que son selecteur est fausse, pour l'instant je mets ça en except mais il faudrait trouver un moyen de check si le prix barré existe vraiment ou pas pour éviter de tomber dans cet except à chaque fois alors que le prix barré existe mais que le selecteur a juste changé
+                    elif content_prix_barre == None: #recherche de moyen de gérer si le prix barré est là mais que son selecteur est fausse, pour l'instant je mets ça en except mais il faudrait trouver un moyen de check si le prix barré existe vraiment ou pas pour éviter de tomber dans cet except à chaque fois alors que le prix barré existe mais que le selecteur a juste changé
                         print('Pas de prix barré, on prend le prix actuel comme prix init')
                         prix_init = prix_actual_sans_taxe
                     
