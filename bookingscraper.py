@@ -648,9 +648,9 @@ class BookingScraper(object):
                             #montreal in ES
                             taxe_text = taxe.find('div', string=re.compile("impuestos", re.IGNORECASE)).text.strip() #OK
                             #Par précaution, on va revériier la langue ici car en local parfois ça revient en ES je ne sais pa spourquoi alors que dans le paramètre c'est strictement FR 19 02 2026
-                            check_langage = input(f"Le langage est en ES,check le navigateur et stop car ce n'est pas normal")
-                            if check_langage == "M":
-                                input('STOP LE PROGRAMME')
+                            # check_langage = input(f"Le langage est en ES,check le navigateur et stop car ce n'est pas normal")
+                            # if check_langage == "M":
+                            #     input('STOP LE PROGRAMME')
                         except:
                             taxe_text = taxe.find('div', string=re.compile("et frais", re.IGNORECASE)).text.strip()
                         
