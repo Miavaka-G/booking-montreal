@@ -276,7 +276,7 @@ class BookingScraper(object):
         # self.chrome_options.add_argument('--headless')  
         self.chrome_options.add_argument('--incognito')
         #11/04/2025 ajout lang=es forcé car parfois ça prend le fr toujours
-        self.chrome_options.add_argument('--lang=es')
+        # self.chrome_options.add_argument('--lang=es')
 
         #pour linux on a besoin de ça car les driver ont été mise à jour sinon pas besoin de mettre le parms service dans le 11
         #pour linux on a besoin de ça car les driver ont été mise à jour sinon pas besoin de mettre le parms service dans le 11
