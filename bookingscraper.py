@@ -654,8 +654,8 @@ class BookingScraper(object):
                         except:
                             taxe_text = taxe.find('div', string=re.compile("et frais", re.IGNORECASE)).text.strip()
                         
-                        if "Taxes et frais compris" not in taxe_text:
-                            print('TAXE présente sur site')
+                        if "Taxes et frais compris" not in taxe_text or "Incluye impuestos y cargos" in taxe_text:
+                            print('TAXE présente sur site') 
                             print('             ')
                             print(f'Taxe inscrit = {taxe_text}')
                             taxe_text = taxe_text.split('CAD')[1]
